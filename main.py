@@ -13,6 +13,8 @@ def main(inst):
 
     escreve(dados, inst)
 
+#Teste
+
 if __name__ == '__main__':
     main(str(sys.argv[1]))
 
