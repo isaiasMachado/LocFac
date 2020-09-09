@@ -1,3 +1,5 @@
+import numpy as np
+
 def read_inst(nome):
 
     facCapac = []
@@ -14,9 +16,7 @@ def read_inst(nome):
             facCapac.append(int(facInfo[0]))
             facCust.append(int(facInfo[1]))
 
-        for c in range(0, cliQtd):
-            demaInfo = fp.readline().split()
-            for i in range(0, len(demaInfo)):
-                cliDema.append(float(demaInfo[i]))
-    inst_lidas = {'nroFac': facQtd, 'nroCli': cliQtd, 'demanda': cliDema}
+        matCt = np.genfromtxt(fp, dtype="float", max_rows=cliQtd)
+        inst_lidas = {'nroFac': facQtd, 'nroCli': cliQtd, 'demanda': matCt}
     return inst_lidas
+

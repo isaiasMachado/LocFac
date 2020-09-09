@@ -9,11 +9,10 @@ t_inicio = time.time()
 def main(inst):
     path = 'c:/Meta/LocFac/Instancias/' + inst
     dados = le(path)
+
     print(dados)
 
     escreve(dados, inst)
-
-#Teste
 
 if __name__ == '__main__':
     main(str(sys.argv[1]))
