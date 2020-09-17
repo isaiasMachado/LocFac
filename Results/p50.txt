@@ -1,3 +1,1 @@
-0 nroFac
-1 nroCli
-2 demanda
+Numero de Facilidades: 10 Quantidade de Cliente: 100

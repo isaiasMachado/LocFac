@@ -7,9 +7,9 @@ from In_Out.write import write_file as escreve
 t_inicio = time.time()
 
 def main(inst):
-    path = 'c:/Meta/LocFac/Instancias/' + inst
+    path = 'c:/Trabalho/LocFac/Instancias/' + inst
     dados = le(path)
-    print(dados)
+    # print(dados)
 
     escreve(dados, inst)
 
