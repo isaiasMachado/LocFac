@@ -1,1 +1,1 @@
-Numero de Facilidades: 10 Quantidade de Cliente: 50
+Qunatidade de Facilidades: 10 Quantidade de Cliente: 50
