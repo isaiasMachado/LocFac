@@ -1,7 +1,8 @@
 import time
 import sys
 
-from In_Out.read import read_inst as le
+from Calculo.function_objetive import functionObjetive
+from In_Out.read import readFile as le
 from In_Out.write import write_file as escreve
 
 t_inicio = time.time()
@@ -11,8 +12,8 @@ def main(inst):
     dados = le(path)
     # print(dados)
 
-    escreve(dados, inst)
-
+   # escreve(dados, inst)
+    functionObjetive(dados)
 #Teste
 
 if __name__ == '__main__':
