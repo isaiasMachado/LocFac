@@ -32,6 +32,7 @@ def readFile(fileName):
         nLocations, nClients = f.readline().strip().split()
         nLocations = int(nLocations)
         nClients = int(nClients)
+
         for _ in range(nLocations):
             b_i, f_i = f.readline().strip().split()
             f_fixed.append(float(f_i))
@@ -46,8 +47,10 @@ def readFile(fileName):
                 clientsCost += line
             clientsCost = np.array([float(x) for x in clientsCost])
             c_costs.append(clientsCost)
+
     f_fixed = np.array(f_fixed)
     f_capacities = np.array(f_capacities)
     c_costs = np.array(c_costs).transpose()
     c_demand = np.array(c_demand)
+
     return f_fixed, f_capacities, c_costs, c_demand,nLocations,nClients
