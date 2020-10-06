@@ -20,37 +20,84 @@
 #                 cliDema.append(float(demaInfo[i]))
 #     inst_lidas = {'nroFac': facQtd, 'nroCli': cliQtd, 'demanda': cliDema}
 #     return inst_lidas
-import math
+# import math
+# import numpy as np
+#
+# def readFile(fileName):
+#     f_fixed = []
+#     f_capacities = []
+#     c_costs = []
+#     c_demand = []
+#     with open(fileName, "r") as f:
+#         nLocations, nClients = f.readline().strip().split()
+#         nLocations = int(nLocations)
+#         nClients = int(nClients)
+#
+#         for _ in range(nLocations):
+#             b_i, f_i = f.readline().strip().split()
+#             f_fixed.append(float(f_i))
+#             f_capacities.append(float(b_i))
+#         for _ in range(nClients):
+#             demand = int(f.readline().strip())
+#             c_demand.append(demand)
+#             lines = math.ceil(nLocations / 7)
+#             clientsCost = []
+#             for _ in range(lines):
+#                 line = f.readline().strip().split()
+#                 clientsCost += line
+#             clientsCost = np.array([float(x) for x in clientsCost])
+#             c_costs.append(clientsCost)
+#
+#     f_fixed = np.array(f_fixed)
+#     f_capacities = np.array(f_capacities)
+#     c_costs = np.array(c_costs).transpose()
+#     c_demand = np.array(c_demand)
+#
+#     return f_fixed, f_capacities, c_costs, c_demand,nLocations,nClients
 import numpy as np
+import math
 
-def readFile(fileName):
-    f_fixed = []
-    f_capacities = []
-    c_costs = []
-    c_demand = []
-    with open(fileName, "r") as f:
-        nLocations, nClients = f.readline().strip().split()
-        nLocations = int(nLocations)
-        nClients = int(nClients)
 
-        for _ in range(nLocations):
-            b_i, f_i = f.readline().strip().split()
-            f_fixed.append(float(f_i))
-            f_capacities.append(float(b_i))
-        for _ in range(nClients):
-            demand = int(f.readline().strip())
-            c_demand.append(demand)
-            lines = math.ceil(nLocations / 7)
-            clientsCost = []
-            for _ in range(lines):
-                line = f.readline().strip().split()
-                clientsCost += line
-            clientsCost = np.array([float(x) for x in clientsCost])
-            c_costs.append(clientsCost)
+def read_inst(nome):
+    facCust = []
+    facCapac = []
+    cusTransCli = []
+    cliDema = []
 
-    f_fixed = np.array(f_fixed)
-    f_capacities = np.array(f_capacities)
-    c_costs = np.array(c_costs).transpose()
-    c_demand = np.array(c_demand)
+    with open(nome, mode='r') as fp:
 
-    return f_fixed, f_capacities, c_costs, c_demand,nLocations,nClients
+        tamInst = fp.readline().split()
+        facQtd = int(tamInst[0])
+        cliQtd = int(tamInst[1])
+
+        for f in range(0, facQtd):
+            facInfo = fp.readline().split()
+            facCapac.append(int(facInfo[0]))
+            facCust.append(float(facInfo[1]))
+
+        for d in range(cliQtd):
+            demanda = int(fp.readline().strip())
+            cliDema.append(demanda)
+            linhas = math.ceil(facQtd / 7)
+
+            custoClientes = []
+
+            for _ in range(linhas):
+                linha = fp.readline().strip().split()
+                custoClientes += linha
+
+            custoClientes = list([float(x) for x in custoClientes])
+
+            cusTransCli.append(custoClientes)
+
+    cusTransCli = np.array(cusTransCli).transpose()
+    print(cusTransCli)
+    cusTransCliFinal = []
+
+    for a in cusTransCli:
+        dictAux = {}
+        for index, l in enumerate(a):
+            dictAux[index + 1] = l
+        cusTransCliFinal.append(dictAux)
+
+    return facCust, facCapac, cusTransCliFinal, cliDema
