@@ -1,6 +1,9 @@
 import random
 
-def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
+from Saida.escrita import saveResultsTXT, saveResultsCSV
+
+
+def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,instName):
     listaFacAbertas = [0] * nroFac
     alocacao_do_cliente = []
     custoTotal = 0
@@ -13,7 +16,7 @@ def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
             if capFac[fac_selecionada] >= demaCli[i]:
                 if listaFacAbertas[fac_selecionada] == 0:
                     custoTotal += custoFac[fac_selecionada]
-                listaFacAbertas[fac_selecionada] = 1
+                listaFacAbertas[fac_selecionada] += 1
                 capFac[fac_selecionada] -= demaCli[i]
                 custoTotal += dist_a_cli[i][fac_selecionada]
 
@@ -23,3 +26,6 @@ def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
     print(listaFacAbertas)
     print(alocacao_do_cliente)
     print("Aleatorio: ",custoTotal)
+
+    saveResultsTXT(instName,listaFacAbertas,alocacao_do_cliente,custoTotal);
+    saveResultsCSV(instName, listaFacAbertas, alocacao_do_cliente, custoTotal);

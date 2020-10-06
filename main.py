@@ -12,13 +12,14 @@ custoFac = []
 demaCli = []
 dist_a_fac = []
 
-def main(inst):
-    path = 'c:/Trabalho/LocFac/Instancias/' + inst
+def main(instName):
+
+    path = 'c:/Trabalho/LocFac/Instancias/' + instName
     nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac = le(path)     # Extrai os dados da instancia
 
     #modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac)
 
-    aleatorio.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac)
+    aleatorio.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac,instName)
 
 if __name__ == '__main__':
     main(str(sys.argv[1]))
