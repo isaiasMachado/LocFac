@@ -1,7 +1,8 @@
 import time
 import sys
 from Entrada.leitura import le_instancia as le
-from Construtiva import modeloMat
+from Construtiva import modeloMat, estratAleatoria
+from Saida.escrita import saveResultsCSV, saveResultsTXT
 
 t_inicio = time.time()      # Marca hora de inicio
 
@@ -14,10 +15,13 @@ dist_a_fac = []
 
 def main(inst):
     path = 'c:/Trabalho/LocFac/Instancias/' + inst
-    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac = le(path)     # Extrai os dados da instancia
+    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli = le(path)     # Extrai os dados da instancia
 
-    modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac)
+    print(modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli))
 
+    listaFacAbertas, alocacaoCli, custoTotal = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal)
+    saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal)
 
 if __name__ == '__main__':
     main(str(sys.argv[1]))
