@@ -1,10 +1,12 @@
 import time
 import sys
 from Entrada.leitura import le_instancia as le
-from Construtiva import modeloMat, aleatorio
+from Construtiva import modeloMat, estratAleatoria, estratGulosa
+from Refinamento.estraAleatoriaRef import funcaoRefinamentoAleatorio
+from Saida.escrita import saveResultsCSV, saveResultsTXT
 
 t_inicio = time.time()      # Marca hora de inicio
-
+SEMENTE = 3
 nroFac = 0
 nroCli = 0
 capFac = []
@@ -12,15 +14,25 @@ custoFac = []
 demaCli = []
 dist_a_fac = []
 
-def main(instName):
+def main(inst):
+    path = 'c:/Trabalho/LocFac/Instancias/' + inst
+    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli = le(path)     # Extrai os dados da instancia
+    # dist_a_cli significa custo de distribuição até o cliente i
 
-    path = 'c:/Trabalho/LocFac/Instancias/' + instName
-    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac = le(path)     # Extrai os dados da instancia
+    # print(modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli))
 
-    #modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac)
+    # Funções Contrutivas
+    #tipo = 'Construtiva'
+    #listaFacAbertas, alocacaoCli, custoTotal = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENTE)
+    #listaFacAbertas, alocacaoCli, custoTotal = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
 
-    aleatorio.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac,instName)
+    #Funções de Refinamento
+    tipo = 'Refinamento'
+    listaFacAbertas, alocacaoCli, custoTotal = funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,inst)
 
+    ## Funções reponsaveis por salvar resultado
+    saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo)
+    saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo)
 if __name__ == '__main__':
     main(str(sys.argv[1]))
 
