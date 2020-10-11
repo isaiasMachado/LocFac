@@ -22,17 +22,25 @@ def main(inst):
     # print(modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli))
 
     # Funções Contrutivas
-    #tipo = 'Construtiva'
-    #listaFacAbertas, alocacaoCli, custoTotal = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENTE)
-    #listaFacAbertas, alocacaoCli, custoTotal = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # tipo = 'Construtiva'
+    #
+    # estrategia= 'Gulosa'
+    # listaFacAbertas, alocacaoCli, custoTotal = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
+
+    # estrategia = 'Aleatoria'
+    # listaFacAbertas, alocacaoCli, custoTotal = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENTE)
+    # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
 
     #Funções de Refinamento
     tipo = 'Refinamento'
+    estrategia = 'Aleatoria'
     listaFacAbertas, alocacaoCli, custoTotal = funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,inst)
+    saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
 
     ## Funções reponsaveis por salvar resultado
-    saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo)
-    saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo)
+
+    #saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo,estrategia)
 if __name__ == '__main__':
     main(str(sys.argv[1]))
 

@@ -8,8 +8,8 @@ def saveResultsTXT(instName, listaFacAbertas, alocacao_do_cliente, custoTotal,ti
         fp.write('Sequencias de facilidades abertas: ' + str(alocacao_do_cliente) + ' | ');
 
 
-def saveResultsCSV(instName, listaFacAbertas, alocacao_do_cliente, custoTotal,tipo):
-    caminho = 'Resultados/'+tipo +'/'  + instName + '.csv';
+def saveResultsCSV(instName, listaFacAbertas, alocacao_do_cliente, custoTotal,tipo,estrategia):
+    caminho = 'Resultados/'+tipo +'/' +estrategia + '/'  + instName + '.csv';
 
     row_list = [["Custo", "Qtd Facilidades Abertas", "Sequencia das facilidades abertas"],
                 [custoTotal, str(listaFacAbertas), str(alocacao_do_cliente)]]

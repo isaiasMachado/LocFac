@@ -26,6 +26,7 @@ def funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a
 
 
     cont = 0
+
     while flag == False:
         aux = sequenciaFacilidades[cont]
         sequenciaFacilidades[cont] = sequenciaFacilidades[nroCli - 1]
@@ -33,6 +34,7 @@ def funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a
         aux = sequenciaFacilidades[cont + 1]
         sequenciaFacilidades[cont + 1] = sequenciaFacilidades[nroCli - 2]
         sequenciaFacilidades[nroCli - 2] = aux
+
         listaFacAbertas, alocacao_do_cliente, custoRefinamento = calculaCusto(nroCli,nroFac,sequenciaFacilidades,capFac,demaCli,custoFac,dist_a_cli)
         if(custoRefinamento < custo):
             flag = True
