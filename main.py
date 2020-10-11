@@ -2,7 +2,8 @@ import time
 import sys
 from Entrada.leitura import le_instancia as le
 from Construtiva import modeloMat, estratAleatoria, estratGulosa
-from Saida.escrita import saveResultsCSV, saveResultsTXT
+from Refinamento import estraAleatoriaRef
+from Saida.escrita import saveResultsCSV, saveResultsTXT, exibeResultado, comparaResultados
 
 
 nroFac = 0
@@ -21,35 +22,49 @@ def main(inst):
     # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal)
     # saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal)
     # print(custoTotal)
-    # listaFacAbertas, alocacaoCli, custoTotal = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # ================================================================================================================
+    # tipo = 'Construtiva'
+    # estrategia = 'Gulosa'
+    # listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    # # ================================================================================================================
     # print(listaFacAbertas)
     # print(alocacaoCli)
     # print(custoTotal)
+    # ==================================================================================================================
     escolha = ''
     while escolha != '9':
-        print('1 estratégia aleatória')
-        print('2 Estratégia gulosa')
-        print('3 Refinamento')
-        print('9 Sair')
+        print('1 - estratégia aleatória')
+        print('2 - Estratégia gulosa')
+        print('3 - Refinamento')
+        print('4 - Exibe resultado busca aleatória')
+        print('5 - Exibe resultado busca gulosa')
+        print('8 - Compara resultados')
+        print('9 - Sair')
         escolha = input('Escolha uma opção: ')
 
         if escolha == '1':
             tipo = 'Construtiva'
             estrategia = 'Aleatoria'
             listaFacAbertas, alocacaoCli, custoTotal, tempo = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
-            saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+            # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+            saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
         elif escolha == '2':
             tipo = 'Construtiva'
             estrategia = 'Gulosa'
-            listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac,
-                                                                                              custoFac, demaCli, dist_a_cli)
+            listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
             saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
         elif escolha == '3':
             tipo = 'Refinamento'
             estrategia = 'Aleatoria'
-            listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac,
-                                                                                  custoFac, demaCli, dist_a_cli)
+            listaFacAbertas, alocacaoCli, custoTotal, tempo = estraAleatoriaRef.funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli, inst)
             saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+        elif escolha == '4':
+            exibeResultado('Resultados/Construtiva/Aleatoria/')
+        elif escolha == '5':
+            exibeResultado('Resultados/Construtiva/Gulosa/')
+        elif escolha == '8':
+            comparaResultados('Resultados/')
         elif escolha == '9':
             break
         else:

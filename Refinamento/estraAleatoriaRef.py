@@ -1,5 +1,9 @@
 import random
-def funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,instancia_name):
+import time
+
+def funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli, instancia_name):
+    t_inicio = time.time()
+
     flag = False;
     custo = 0
     sequenciaFacilidades = []
@@ -35,16 +39,18 @@ def funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a
         sequenciaFacilidades[cont + 1] = sequenciaFacilidades[nroCli - 2]
         sequenciaFacilidades[nroCli - 2] = aux
 
-        listaFacAbertas, alocacao_do_cliente, custoRefinamento = calculaCusto(nroCli,nroFac,sequenciaFacilidades,capFac,demaCli,custoFac,dist_a_cli)
+        listaFacAbertas, alocacao_do_cliente, custoRefinamento = calculaCusto(nroCli, nroFac, sequenciaFacilidades, capFac,
+                                                                              demaCli, custoFac, dist_a_cli)
         if(custoRefinamento < custo):
             flag = True
         else:
             cont +=1
+    t_total = time.time() - t_inicio
+    tempo_formatado = '{:.5f}s'.format(t_total)
+    return listaFacAbertas, alocacao_do_cliente, custoRefinamento, tempo_formatado;
 
-    return listaFacAbertas, alocacao_do_cliente, custoRefinamento
 
-
-def calculaCusto(nroCli,nroFac,sequenciaFacilidades,capFac,demaCli,custoFac,dist_a_cli):
+def calculaCusto(nroCli, nroFac, sequenciaFacilidades, capFac, demaCli, custoFac, dist_a_cli):
     listaFacAbertas = [0] * nroFac
     custoTotal = 0
     cont = 0
@@ -53,7 +59,7 @@ def calculaCusto(nroCli,nroFac,sequenciaFacilidades,capFac,demaCli,custoFac,dist
 
         while True:
           cont += 1
-          fac_selecionada =  sequenciaFacilidades[cont-1]
+          fac_selecionada = sequenciaFacilidades[cont-1]
 
           if capFac[fac_selecionada] >= demaCli[i]:
                 if listaFacAbertas[fac_selecionada] == 0:
