@@ -1,7 +1,9 @@
 import random
-
+import time
 
 def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
+    t_inicio = time.time()
+
     listaFacAbertas = [0] * nroFac
     alocacao_do_cliente = []
     custoTotal = 0
@@ -24,7 +26,8 @@ def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
 
                 alocacao_do_cliente.append(fac_selecionada)
                 break
-
-    return listaFacAbertas, alocacao_do_cliente, custoTotal
+    t_total = time.time() - t_inicio
+    tempo_formatado = '{:.5f}s'.format(t_total)
+    return listaFacAbertas, alocacao_do_cliente, custoTotal, tempo_formatado
 
 
