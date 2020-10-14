@@ -24,7 +24,7 @@ def exibeResultado(caminho):
     nameBase = caminho + '/p'
     result.write('|Inst.| Result | Times(s)|\n')
     result.write('|-----|--------|---------|\n')
-    for index in range(1, 4):       # Alterar o range quando quiser fazer testes
+    for index in range(1, 72):       # Alterar o range quando quiser fazer testes
         minCost = sys.maxsize
         minUsedTime = sys.maxsize
         for i in range(1, 4):
@@ -34,7 +34,6 @@ def exibeResultado(caminho):
                 cost = float(f.readline())
                 if cost < minCost:
                     minCost = cost
-                    # minFile = allFile
                     minUsedTime = usedTimes
         result.write('|  p' + str(index) + ' |' + str(minCost) + '|' + str(minUsedTime))
     result.close()
