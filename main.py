@@ -1,12 +1,10 @@
 import time
 import sys
-from Entrada.leitura import le_instancia as le
+from Entrada.leitura import le_instancia as le, le_instancia_csv
 from Construtiva import modeloMat, estratAleatoria, estratGulosa
-from Refinamento.estraAleatoriaRef import funcaoRefinamentoAleatorio
-from Saida.escrita import saveResultsCSV, saveResultsTXT
+from Refinamento import estraAleatoriaRef
+from Saida.escrita import saveResultsCSV, saveResultsTXT, exibeResultado, comparaResultados
 
-t_inicio = time.time()      # Marca hora de inicio
-SEMENTE = 3
 nroFac = 0
 nroCli = 0
 capFac = []
@@ -14,36 +12,73 @@ custoFac = []
 demaCli = []
 dist_a_fac = []
 
+
 def main(inst):
     path = 'c:/Trabalho/LocFac/Instancias/' + inst
-    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli = le(path)     # Extrai os dados da instancia
+    nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli = le(path)  # Extrai os dados da instancia
     # dist_a_cli significa custo de distribuição até o cliente i
-
     # print(modeloMat.funcaoObjetivo(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli))
-
-    # Funções Contrutivas
+    # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal)
+    # ================================================================================================================
     # tipo = 'Construtiva'
-    #
-    # estrategia= 'Gulosa'
-    # listaFacAbertas, alocacaoCli, custoTotal = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
-    # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
-
     # estrategia = 'Aleatoria'
-    # listaFacAbertas, alocacaoCli, custoTotal = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENTE)
-    # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
-
-    #Funções de Refinamento
+    # listaFacAbertas, alocacaoCli, custoTotal, tempo = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    # print(custoTotal)
+    # ================================================================================================================
+    # tipo = 'Construtiva'
+    # estrategia = 'Gulosa'
+    # listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    # saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    # ================================================================================================================
     tipo = 'Refinamento'
     estrategia = 'Aleatoria'
-    listaFacAbertas, alocacaoCli, custoTotal = funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,inst)
-    saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tipo, estrategia)
+    listaFacAbertas, alocacaoCli, custoTotal, tempo = estraAleatoriaRef.funcaoRefinamentoAleatorio(nroFac, nroCli,
+                                                                                                   custoFac, demaCli,
+                                                                                                   dist_a_cli, inst)
+    saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    # print(listaFacAbertas)
+    # print(alocacaoCli)
+    # print(custoTotal)
+    # ==================================================================================================================
+    # escolha = ''
+    # while escolha != '9':
+    #     print('1 - estratégia aleatória')
+    #     print('2 - Estratégia gulosa')
+    #     print('3 - Refinamento')
+    #     print('4 - Exibe resultado busca aleatória')
+    #     print('5 - Exibe resultado busca gulosa')
+    #     print('8 - Compara resultados')
+    #     print('9 - Sair')
+    #     escolha = input('Escolha uma opção: ')
+    #
+    #     if escolha == '1':
+    #         tipo = 'Construtiva'
+    #         estrategia = 'Aleatoria'
+    #         listaFacAbertas, alocacaoCli, custoTotal, tempo = estratAleatoria.funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    #         # saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    #         saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    #     elif escolha == '2':
+    #         tipo = 'Construtiva'
+    #         estrategia = 'Gulosa'
+    #         listaFacAbertas, alocacaoCli, custoTotal, tempo = estratGulosa.gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli)
+    #         saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    #     elif escolha == '3':
+    #         tipo = 'Refinamento'
+    #         estrategia = 'Aleatoria'
+    #         listaFacAbertas, alocacaoCli, custoTotal, tempo = estraAleatoriaRef.funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli, inst)
+    #         saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
+    #     elif escolha == '4':
+    #         exibeResultado('Resultados/Construtiva/Aleatoria/')
+    #     elif escolha == '5':
+    #         exibeResultado('Resultados/Construtiva/Gulosa/')
+    #     elif escolha == '8':
+    #         comparaResultados('Resultados/')
+    #     elif escolha == '9':
+    #         break
+    #     else:
+    #         print('Você deve escolher uma opção válida!')
 
-    ## Funções reponsaveis por salvar resultado
 
-    #saveResultsTXT(inst, listaFacAbertas, alocacaoCli, custoTotal,tipo,estrategia)
 if __name__ == '__main__':
     main(str(sys.argv[1]))
-
-t_total = time.time() - t_inicio
-
-print('{:.4f}s'.format(t_total))

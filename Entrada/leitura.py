@@ -38,3 +38,30 @@ def le_instancia(nome):
     return nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac
 
 
+def le_instancia_csv(inst):
+    caminho = 'c:/Trabalho/LocFac/Resultados/Construtiva/Aleatoria/' + inst
+    seqFacilidades = []
+
+    with open(caminho, mode='r') as fp:
+        fp.readline().split()
+        custo = fp.readline().split()[0]
+        fp.readline().split()
+        aux = fp.readline().split()
+        for i in aux:
+            seqFacilidades.append(int(i))
+
+    return float(custo), seqFacilidades;
+
+
+def capacidade(instancia_name):
+    caminho = 'c:/Trabalho/LocFac/Instancias/' + instancia_name
+    capFac = []
+
+    with open(caminho, mode='r') as fp:
+        problem_size = fp.readline().split()
+        nroFac = int(problem_size[0])
+        for i in range(0, nroFac):
+            facility_info = fp.readline().split()
+            capFac.append(int(facility_info[0]))
+
+    return capFac

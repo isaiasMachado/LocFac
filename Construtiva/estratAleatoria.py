@@ -1,12 +1,14 @@
 import random
+import time
 
+def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
+    t_inicio = time.time()
 
-def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENTE):
     listaFacAbertas = [0] * nroFac
     alocacao_do_cliente = []
     custoTotal = 0
 
-    random.seed(SEMENTE)  # Para reprodução do experimento é necessário determinar a semente aleatória
+    random.seed(3)  # Para reprodução do experimento é necessário determinar a semente aleatória
 
     cont = 0
 
@@ -24,8 +26,8 @@ def funcaoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli,SEMENT
 
                 alocacao_do_cliente.append(fac_selecionada)
                 break
-
-
-    return listaFacAbertas, alocacao_do_cliente, custoTotal
+    t_total = time.time() - t_inicio
+    tempo_formatado = '{:.5f}s'.format(t_total)
+    return listaFacAbertas, alocacao_do_cliente, custoTotal, tempo_formatado
 
 

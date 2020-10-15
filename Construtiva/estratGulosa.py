@@ -1,15 +1,18 @@
 import sys
+import time
+custoMax = 10000000
 
 def gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
+    t_inicio = time.time()
+
     custoTotal = 0
     listaFacAbertas = [0] * nroFac
     alocacao_do_cliente = []
     capacidadeRestante = capFac
 
     for i in range(nroCli):
-        print(capacidadeRestante) # Exibe o quanto ainda resta de capacidade para cada facilidade
 
-        custoMin = 10000
+        custoMin = custoMax
         minIndex = -1
         for j in range(nroFac):
             custo = 0
@@ -32,4 +35,6 @@ def gulosa(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli):
             listaFacAbertas[minIndex] = 1
             alocacao_do_cliente.append(minIndex)
 
-    return listaFacAbertas, alocacao_do_cliente, custoTotal
+    t_total = time.time() - t_inicio
+    tempo_formatado = '{:.5f}s'.format(t_total)
+    return listaFacAbertas, alocacao_do_cliente, custoTotal, tempo_formatado
