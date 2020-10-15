@@ -63,7 +63,7 @@ def main(inst):
         elif escolha == '3':
             tipo = 'Refinamento'
             estrategia = 'Aleatoria'
-            listaFacAbertas, alocacaoCli, custoTotal, tempo = estraAleatoriaRef.funcaoRefinamentoAleatorio(nroFac, nroCli, capFac, custoFac, demaCli, dist_a_cli, inst)
+            listaFacAbertas, alocacaoCli, custoTotal, tempo = estraAleatoriaRef.funcaoRefinamentoAleatorio(nroFac, nroCli, custoFac, demaCli, dist_a_cli, inst)
             saveResultsCSV(inst, listaFacAbertas, alocacaoCli, custoTotal, tempo, tipo, estrategia)
         elif escolha == '4':
             exibeResultado('Resultados/Construtiva/Aleatoria/')
