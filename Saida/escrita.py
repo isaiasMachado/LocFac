@@ -4,15 +4,13 @@ import sys
 def saveResultsTXT(instName, listaFacAbertas, alocacao_do_cliente, custoTotal, tempo, tipo, estrategia):
     aux = ''
     with open('Resultados/' + tipo + '/' + estrategia + '/' + instName, mode='w') as fp:
-        # fp.write('File : Instancia/' + instName + '\n')
         fp.write(tempo + '\n')
         fp.write(str(custoTotal) + '\n')
         fp.write(str(listaFacAbertas) + '\n')
-
         for i in alocacao_do_cliente:
-            aux += str(i)+ ' ';
-
-        fp.write(aux)
+            aux += str(i)+ ', ';
+        aux = aux[:-2]
+        fp.write('['+aux+']')
 
 
 
@@ -40,7 +38,7 @@ def exibeResultado(caminho):
                 if cost < minCost:
                     minCost = cost
                     minUsedTime = usedTimes
-        result.write('|  p' + str(index) + ' |' + str(minCost) + '|' + str(minUsedTime))
+        result.write('|  p' + str(index) + ' |' + str(format(minCost, '.2f')) + '|' + str(minUsedTime))
     result.close()
 
 def comparaResultados(caminho):
