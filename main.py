@@ -52,8 +52,8 @@ class SA:
 
         for i in range(0, self.num_fac):
             infor_fac = fp.readline().split()
-            self.cap_fac.append(float(infor_fac[0]))
-            self.custo_abert_fac.append(float(infor_fac[1]))
+            self.cap_fac.append(int(infor_fac[0]))
+            self.custo_abert_fac.append(int(infor_fac[1]))
 
         while len(self.deman_cli) < self.num_cli:
             infor_demanda = fp.readline().split()
