@@ -1,6 +1,4 @@
 import numpy as np
-import math
-
 
 def le_instancia(nome):
     nroFac = 0
