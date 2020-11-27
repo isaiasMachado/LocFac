@@ -1,6 +1,4 @@
 import numpy as np
-import math
-
 
 def le_instancia(nome):
     nroFac = 0
@@ -36,7 +34,6 @@ def le_instancia(nome):
         dist_a_fac = np.array(distance_infos).transpose()
 
     return nroFac, nroCli, capFac, custoFac, demaCli, dist_a_fac
-
 
 def le_instancia_csv(inst):
     caminho = 'c:/Trabalho/LocFac/Resultados/Construtiva/Aleatoria/' + inst

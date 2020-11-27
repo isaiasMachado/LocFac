@@ -4,15 +4,13 @@ import sys
 def saveResultsTXT(instName, listaFacAbertas, alocacao_do_cliente, custoTotal, tempo, tipo, estrategia):
     aux = ''
     with open('Resultados/' + tipo + '/' + estrategia + '/' + instName, mode='w') as fp:
-        # fp.write('File : Instancia/' + instName + '\n')
         fp.write(tempo + '\n')
         fp.write(str(custoTotal) + '\n')
         fp.write(str(listaFacAbertas) + '\n')
-
         for i in alocacao_do_cliente:
-            aux += str(i)+ ' ';
-
-        fp.write(aux)
+            aux += str(i)+ ', ';
+        aux = aux[:-2]
+        fp.write('['+aux+']')
 
 
 
@@ -35,29 +33,28 @@ def exibeResultado(caminho):
         minUsedTime = sys.maxsize
         for i in range(1, 4):
             with open(nameBase + str(index), 'r') as f:
-                print(nameBase + str(index))
                 usedTimes = f.readline()
                 cost = float(f.readline())
                 if cost < minCost:
                     minCost = cost
                     minUsedTime = usedTimes
-        result.write('|  p' + str(index) + ' |' + str(minCost) + '|' + str(minUsedTime))
+        result.write('|  p' + str(index) + ' |' + str(format(minCost, '.2f')) + '|' + str(minUsedTime))
     result.close()
 
 def comparaResultados(caminho):
     resultComparacao = open('resultComparacao.md', 'w')
-    fileNames = ['Resultados/Construtiva/Gulosa/Result.md', 'Resultados/Construtiva/Aleatoria/Result.md']
-    resultComparacao.write('| Gulosa | Tempo(s) \n| Aleatoria | Tempo(s)\n')
+    fileNames = ['Resultados/Construtiva/Gulosa/Result.md', 'Resultados/Construtiva/Aleatoria/Result.md', 'Resultados/Refinamento/Aleatoria/Result.md']
+    resultComparacao.write('| Gulosa | Tempo(s) \n| Aleatoria | Tempo(s)\n| Refinamento | Tempo(s)\n')
     resultComparacao.write('\n')
 
-    files = [open(fileNames[i]) for i in range(2)]
-    fileLines = [files[i].readlines() for i in range(2)]
+    files = [open(fileNames[i]) for i in range(3)]
+    fileLines = [files[i].readlines() for i in range(3)]
     print(fileLines)
 
     for i in range(2, len(fileLines[0])):
         resultComparacao.write(fileLines[0][i])
         resultComparacao.write(fileLines[1][i])
-        # resultComparacao.write(fileLines[2][i])
+        resultComparacao.write(fileLines[2][i])
         # resultComparacao.write(fileLines[3][i])
         resultComparacao.write('\n\n')
 
