@@ -292,15 +292,17 @@ class GA:
         for i in range(0,len(vetAux)) :
             avaliacoes.append(self.calcula_custo( vetAux[i]))
 
-        print(vetAux)
         print(avaliacoes)
-        dicionario = []
-        for i in range(0,len(avaliacoes)):
-            dicionario.append(vetAux[i])
-            dicionario.append(avaliacoes[i])
+        print(sorted(avaliacoes))
+        print(avaliacoes.index(sorted(avaliacoes)[0]))
+        print(vetAux[avaliacoes.index(sorted(avaliacoes)[0])])
+        # dicionario = []
+        # for i in range(0,len(avaliacoes)):
+        #     dicionario.append(vetAux[i])
+        #     dicionario.append(avaliacoes[i])
 
-        print(dicionario)
-        
+        #print(dicionario)
+
     def solve(self):
         notasIndividuos = []
         self.aloc_inicial_cliente()
