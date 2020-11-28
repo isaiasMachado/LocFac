@@ -19,8 +19,9 @@ limite = 10
 tam_populacao = 5
 PE = 0.4
 PM = 0.2
-random.seed(7)
-SEMENTE = 3
+SEMENTE = 13
+random.seed(SEMENTE)
+
 
 class SA:
 
@@ -159,6 +160,7 @@ class GA:
         self.geracao = 0
         self.populacao = []
         self.populacao_elite = []
+        self.populacao_eliteAux = []
         self.populacao_mutacao = []
         self.populacao_cruzamento = []
         self.individuo_final = []
@@ -276,6 +278,7 @@ class GA:
 
         self.avaliacoes = avaliacoesAux
 
+
     def selecao_elite(self):
 
         select_avaliacoes = []
@@ -305,13 +308,14 @@ class GA:
 
 
         self.populacao_elite = individuos_selecionados
+        self.populacao_eliteAux = individuos_selecionados
+        self.selecao_mutacao()
 
     def selecao_cruzamento(self):
         #METODO USADADO Order Crossover (OX)
 
         individuo_cruzamento = [0]*self.num_cli
         auxPopElite = self.populacao_elite
-        random.seed(SEMENTE)  # Para reprodução do experimento é necessário determinar a semente aleatória
 
         indices_selecionados_aleatoriatoriamente = []
         for i in range(0,2):
@@ -334,42 +338,43 @@ class GA:
         self.populacao_cruzamento = individuo_cruzamento
 
     def selecao_mutacao(self):
-        auxElite = self.populacao_elite
-        populacao_mutacao = []
+        PopElite = self.populacao_eliteAux
+        ind1 = []
+        ind2 = []
+        populacao_mutante = []
 
-        random.seed(SEMENTE)  # Para reprodução do experimento é necessário determinar a semente aleatória
-        indices = []
-        for i in range(0, 4):
-            indices.append(random.randint(0, self.num_cli - 1))
+        for i in range(0,len(PopElite)):
+            vet1 = PopElite[i]
+            for j in range(0,int(self.num_cli/2)):
+                ind1.append(vet1[j])
 
-        sorted(indices)
-        aux = 0
-        for i in range(0,len(auxElite)):
+        for i in range(0,len(PopElite)):
+            vet2 = PopElite[i]
+            for j in range(int(self.num_cli/2),self.num_cli):
+                ind2.append(vet2[j])
 
-            # 1º Troca de Posições
-            aux = auxElite[i][indices[0]]
-            auxElite[i][indices[0]] = auxElite[i][indices[3]]
-            auxElite[i][indices[3]] = aux
+        populacao_mutante.append(ind1)
+        populacao_mutante.append(ind2)
 
-            #2º Troca de Posições
-            aux = auxElite[i][indices[1]]
-            auxElite[i][indices[1]] = auxElite[i][indices[2]]
-            auxElite[i][indices[2]] = aux
-
-            populacao_mutacao.append(auxElite[i])
-
-        self.populacao_mutacao = populacao_mutacao
+        self.populacao_mutacao = populacao_mutante
 
     def nova_geracao(self):
         geracao = []
 
+        self.populacao = []
+
         geracao.append(self.populacao_cruzamento)
+
         for i in range(0,len(self.populacao_elite)):
             geracao.append(self.populacao_elite[i])
+            #print((self.populacao_elite[i]))
+
         for i in range(0,len(self.populacao_mutacao)):
             geracao.append(self.populacao_mutacao[i])
+            #print((self.populacao_mutacao[i]))
 
-        self.populacao = []
+
+
         self.populacao = geracao
 
     def melhor_individuo(self):
@@ -379,8 +384,11 @@ class GA:
         indices = []
         individuos_selecionados = []
 
+        # for i in range(0,len(self.populacao)):
+        #     print(sorted(self.populacao[i]))
         for i in range(0, 1):
             select_avaliacoes.append(sorted(aux_avaliacoes)[i])
+
 
         for i in range(0, len(select_avaliacoes)):
             indices.append(self.avaliacoes.index(select_avaliacoes[i]))
@@ -388,12 +396,14 @@ class GA:
         for i in range(0, len(indices)):
             individuos_selecionados.append(aux_populacao[indices[i]])
 
-
+        #
         for i in range(0,len(individuos_selecionados)):
-            self.individuo_final.append(self.calcula_custo(individuos_selecionados[i]))
-            self.individuo_final.append(individuos_selecionados[i])
-
+            self.individuo_final.append(select_avaliacoes)
+            self.individuo_final.append((individuos_selecionados[i]))
+        #
+        self.custo_total = select_avaliacoes[0]
         print(self.individuo_final)
+        print("--------------------------------------------------------------")
 
 
     def solve(self):
@@ -403,7 +413,6 @@ class GA:
         self.avaliacao()
         self.selecao_elite()
         self.selecao_cruzamento()
-        self.selecao_mutacao()
         self.nova_geracao()
         self.avaliacao()
         self.melhor_individuo()
@@ -434,7 +443,7 @@ def main():
         write_file_name = 'Tabela dos resultados do GA'
     fp = open(write_file_name, 'a')
     if os.stat(write_file_name).st_size == 0:
-        fp.write(''.ljust(10) + 'Resultado'.ljust(20) + 'Tempo(s)\n')
+        fp.write(''.ljust(10) + 'Resultado'.ljust(20) + 'Tempo(ms)\n')
 
     for i in range(1, numero_instancia+1):
         nomeInstancia = 'Instancias/' + pastaInstDesejada + '/p' + str(i)
@@ -450,7 +459,7 @@ def main():
             solution3 = GA(nomeInstancia)
             res = solution3.solve()
         end_time = datetime.datetime.now()
-        fp.write(('p' + str(i)).ljust(10) + str(res).ljust(20) + str((end_time - start_time).seconds) + '\n')
+        fp.write(('p' + str(i)).ljust(10) + str(res).ljust(20) + str((end_time - start_time).microseconds/1000) + '\n')
 
 
 if __name__ == '__main__':
