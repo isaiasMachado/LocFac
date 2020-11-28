@@ -14,9 +14,13 @@ temp_min = 0.5      # Parâmetro da temperatura: usado no SA
 coeficient_atenuacao = 0.99     # Parâmetro da temperatura: usado no SA
 
 limite = 10
-tam_populacao = 5
 
+#PARAMETROS ALGORITMO GENETICO
+tam_populacao = 5
+PE = 0.4
+PM = 0.2
 random.seed(7)
+SEMENTE = 3
 
 class SA:
 
@@ -136,9 +140,8 @@ class SA:
 
 class GA:
 
-    def __init__(self, nomeInstancia,pastaInstDesejada):
+    def __init__(self, nomeInstancia):
         self.nomeInstancia = nomeInstancia
-        self.pastaInstDesejada = pastaInstDesejada
         self.num_fac = 0
         self.num_cli = 0
         self.cap_fac = []
@@ -146,6 +149,7 @@ class GA:
         self.deman_cli = []
         self.dist_a_fac = []
         self.read_file()
+        self.valiacoes = []
 
         self.lista_fac_abertas = [0]*self.num_fac    # [0 for _ in range(self.num_fac)]
         # print(self.lista_fac_abertas)
@@ -154,6 +158,10 @@ class GA:
 
         self.geracao = 0
         self.populacao = []
+        self.populacao_elite = []
+        self.populacao_mutacao = []
+        self.populacao_cruzamento = []
+        self.individuo_final = []
 
     def aloc_inicial_cliente(self):
             for i in range(0, self.num_cli):
@@ -219,7 +227,7 @@ class GA:
         caminho = 'c:/Trabalho/LocFac/'+ self.nomeInstancia
 
         capFac = []
-        # print(caminho)
+
         with open(caminho, mode='r') as fp:
             problem_size = fp.readline().split()
             nroFac = int(problem_size[0])
@@ -227,35 +235,8 @@ class GA:
                 facility_info = fp.readline().split()
                 capFac.append(int(facility_info[0]))
 
-        return capFac
 
-    # def calcula_custo(self):
-    #     cont = 0
-    #     custoTotal = 0
-    #     listaFacAbertas = [0] * self.num_fac
-    #     nroCli = self.num_cli
-    #     sequenciaFacilidades =[0, 12, 0, 0, 12, 12, 12, 12, 12, 12, 0, 12, 12, 12, 13, 13, 0, 0, 13, 9, 13, 13, 0, 13, 9, 13, 0, 1, 1, 1, 13, 1, 1, 1, 1, 9, 1, 13, 19, 19, 9, 5, 5, 5, 9, 5, 5, 9, 19, 9]
-    #     demaCli = self.deman_cli
-    #     dist_a_cli = self.dist_a_fac
-    #     custoFac = self.custo_abert_fac
-    #     vetAux = self.capacidade_cada_facilidade()
-    #
-    #     for i in range(0, nroCli):
-    #         while True:
-    #             fac_selecionada = sequenciaFacilidades[cont]
-    #             cont += 1
-    #             if vetAux[fac_selecionada] >= demaCli[i]:
-    #                 if listaFacAbertas[fac_selecionada] == 0:
-    #                     custoTotal += custoFac[fac_selecionada]
-    #                 listaFacAbertas[fac_selecionada] += 1
-    #                 vetAux[fac_selecionada] -= demaCli[i]
-    #                 custoTotal += dist_a_cli[i][fac_selecionada]
-    #                 break
-    #             else:
-    #                 cont -= 1
-    #                 break
-    #
-    #     return custoTotal
+        return capFac
 
     def calcula_custo(self, seq):
 
@@ -287,33 +268,146 @@ class GA:
         return custoTotal
 
     def avaliacao(self):
+        self.avaliacoes = []
         vetAux = self.populacao
-        avaliacoes = []
+        avaliacoesAux = []
         for i in range(0,len(vetAux)) :
-            avaliacoes.append(self.calcula_custo( vetAux[i]))
+            avaliacoesAux.append(self.calcula_custo( vetAux[i]))
 
-        print(avaliacoes)
-        print(sorted(avaliacoes))
-        print(avaliacoes.index(sorted(avaliacoes)[0]))
-        print(vetAux[avaliacoes.index(sorted(avaliacoes)[0])])
-        # dicionario = []
-        # for i in range(0,len(avaliacoes)):
-        #     dicionario.append(vetAux[i])
-        #     dicionario.append(avaliacoes[i])
+        self.avaliacoes = avaliacoesAux
 
-        #print(dicionario)
+    def selecao_elite(self):
+
+        select_avaliacoes = []
+        aux_avaliacoes = self.avaliacoes
+        aux_populacao = self.populacao
+        indices = []
+        individuos_selecionados = []
+        for i in range(0,int(tam_populacao*PE)):
+            select_avaliacoes.append(sorted(aux_avaliacoes)[i])
+
+        for i in range(0, len(select_avaliacoes)):
+            indices.append(self.avaliacoes.index(select_avaliacoes[i]))
+
+        for i in range(0, len(indices)):
+            individuos_selecionados.append(aux_populacao[indices[i]])
+
+        # for i in range(0,len(self.populacao)):
+        #     print(self.populacao[i])
+        # print(self.avaliacoes)
+        # print('---------------------')
+        #
+        # for i in range(0,len(individuos_selecionados)):
+        #     print(individuos_selecionados[i])
+        #
+        # print('---------------------')
+        # print('---------------------')
+
+
+        self.populacao_elite = individuos_selecionados
+
+    def selecao_cruzamento(self):
+        #METODO USADADO Order Crossover (OX)
+
+        individuo_cruzamento = [0]*self.num_cli
+        auxPopElite = self.populacao_elite
+        random.seed(SEMENTE)  # Para reprodução do experimento é necessário determinar a semente aleatória
+
+        indices_selecionados_aleatoriatoriamente = []
+        for i in range(0,2):
+            indices_selecionados_aleatoriatoriamente.append(random.randint(0, self.num_cli -1 ))
+
+        aux = sorted(indices_selecionados_aleatoriatoriamente)
+
+        #Copia-se na prole a parte do pai 1 que está entre os dois pontos.
+        for i in range(aux[0],aux[1]):
+            individuo_cruzamento[i] = auxPopElite[0][i]
+
+        #Do pai 2, escolhe-se os elementos que ainda não foram selecionados do pai 1 para preenchê-los na prole.
+        Pai2 = auxPopElite[1]
+        for i in range(0,aux[0]):
+            individuo_cruzamento[i] = Pai2[i]
+
+        for i in range(aux[1], len(individuo_cruzamento)):
+            individuo_cruzamento[i] = Pai2[i]
+
+        self.populacao_cruzamento = individuo_cruzamento
+
+    def selecao_mutacao(self):
+        auxElite = self.populacao_elite
+        populacao_mutacao = []
+
+        random.seed(SEMENTE)  # Para reprodução do experimento é necessário determinar a semente aleatória
+        indices = []
+        for i in range(0, 4):
+            indices.append(random.randint(0, self.num_cli - 1))
+
+        sorted(indices)
+        aux = 0
+        for i in range(0,len(auxElite)):
+
+            # 1º Troca de Posições
+            aux = auxElite[i][indices[0]]
+            auxElite[i][indices[0]] = auxElite[i][indices[3]]
+            auxElite[i][indices[3]] = aux
+
+            #2º Troca de Posições
+            aux = auxElite[i][indices[1]]
+            auxElite[i][indices[1]] = auxElite[i][indices[2]]
+            auxElite[i][indices[2]] = aux
+
+            populacao_mutacao.append(auxElite[i])
+
+        self.populacao_mutacao = populacao_mutacao
+
+    def nova_geracao(self):
+        geracao = []
+
+        geracao.append(self.populacao_cruzamento)
+        for i in range(0,len(self.populacao_elite)):
+            geracao.append(self.populacao_elite[i])
+        for i in range(0,len(self.populacao_mutacao)):
+            geracao.append(self.populacao_mutacao[i])
+
+        self.populacao = []
+        self.populacao = geracao
+
+    def melhor_individuo(self):
+        select_avaliacoes = []
+        aux_avaliacoes = self.avaliacoes
+        aux_populacao = self.populacao
+        indices = []
+        individuos_selecionados = []
+
+        for i in range(0, 1):
+            select_avaliacoes.append(sorted(aux_avaliacoes)[i])
+
+        for i in range(0, len(select_avaliacoes)):
+            indices.append(self.avaliacoes.index(select_avaliacoes[i]))
+
+        for i in range(0, len(indices)):
+            individuos_selecionados.append(aux_populacao[indices[i]])
+
+
+        for i in range(0,len(individuos_selecionados)):
+            self.individuo_final.append(self.calcula_custo(individuos_selecionados[i]))
+            self.individuo_final.append(individuos_selecionados[i])
+
+        print(self.individuo_final)
+
 
     def solve(self):
-        notasIndividuos = []
+
         self.aloc_inicial_cliente()
         self.gera_populacao()   # Gera população inicial aleatoriamente
-        #self.calcula_custo()
         self.avaliacao()
-        # while self.geracao < limite:
-        #     self.geracao += 1
-        #     for i in range(0, len(self.populacao)):
-        #         notasIndividuos.append(self.avaliacao(self.populacao[i]))
-            # print(notasIndividuos)
+        self.selecao_elite()
+        self.selecao_cruzamento()
+        self.selecao_mutacao()
+        self.nova_geracao()
+        self.avaliacao()
+        self.melhor_individuo()
+
 
         self.write_file()
         return self.custo_total
@@ -353,7 +447,7 @@ def main():
             res = solution2.solve()
         elif command == '3':
             # pass
-            solution3 = GA(nomeInstancia,pastaInstDesejada )
+            solution3 = GA(nomeInstancia)
             res = solution3.solve()
         end_time = datetime.datetime.now()
         fp.write(('p' + str(i)).ljust(10) + str(res).ljust(20) + str((end_time - start_time).seconds) + '\n')
