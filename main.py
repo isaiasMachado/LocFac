@@ -19,7 +19,7 @@ limite = 10
 tam_populacao = 5
 PE = 0.4
 PM = 0.2
-SEMENTE = 13
+SEMENTE = 7
 random.seed(SEMENTE)
 
 
